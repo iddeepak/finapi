@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>3 P</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    input {
+      width: 150px;
+      padding: 10px;
+      margin: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin: 10px;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+      input, button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>3 P</h1>
+  <label for="date1">Date 1:</label>
+  <input type="date" id="date1"><br><br>
+  <label for="date2">Date 2:</label>
+  <input type="date" id="date2"><br><br>
+  <button id="compareButton">Compare</button>
+  <div id="result"></div>
+  <script>
+    const compareButton = document.getElementById('compareButton');
+    const resultDiv = document.getElementById('result');
+
+    compareButton.addEventListener('click', async () => {
+      const date1 = formatToDDMMYYYY(document.getElementById('date1').value);
+      const date2 = formatToDDMMYYYY(document.getElementById('date2').value);
+      resultDiv.textContent = 'Loading...';
+
+      try {
+        const response = await fetch(`/getSymbolsWithHigherDelivery/${date1}/${date2}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.symbols && data.symbols.length > 0) {
+            resultDiv.textContent = 'Stocks with higher delivery: ' + data.symbols.join(', ');
+          } else {
+            resultDiv.textContent = 'No matching stocks found.';
+          }
+        } else {
+          resultDiv.textContent = 'Error: ' + response.statusText;
+        }
+      } catch (error) {
+        console.error(error);
+        resultDiv.textContent = 'An error occurred while fetching data.';
+      }
+    });
+    function formatToDDMMYYYY(date) {
+      const parts = date.split('-');
+      if (parts.length === 3) {
+        const day = parts[2];
+        const month = parts[1];
+        const year = parts[0];
+        return `${day}${month}${year}`;
+      }
+      return date;
+    }
+  </script>
+</body>
+</html>
