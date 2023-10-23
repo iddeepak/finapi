@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Stock Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -10,12 +11,13 @@
       background-color: #f0f0f0;
     }
     input {
-      width: 150px;
+      width: -webkit-fill-available;
       padding: 10px;
       margin: 5px;
     }
     button {
-      padding: 10px 20px;
+      width: -webkit-fill-available;
+      padding: 10px;
       background-color: #007BFF;
       color: #fff;
       border: none;
@@ -26,22 +28,28 @@
       margin-top: 20px;
       font-weight: bold;
     }
-    
-    /* Responsive Styles */
-    @media (max-width: 600px) {
-      input, button {
-        width: 100%;
-      }
+    .main{
+      padding: 10%;
     }
   </style>
 </head>
 <body>
+  <div class="main">
+    <div>
   <h1>Stock Details</h1>
+</div>
+<div>
   <label for="date1">Date 1:</label>
   <input type="date" id="date1"><br><br>
+</div>
+<div>
   <label for="date2">Date 2:</label>
   <input type="date" id="date2"><br><br>
+</div>
+<div>
   <button id="compareButton">Compare</button>
+</div>
+</div>
   <div id="result"></div>
   <script>
     const compareButton = document.getElementById('compareButton');
@@ -57,7 +65,7 @@
         if (response.ok) {
           const data = await response.json();
           if (data.symbols && data.symbols.length > 0) {
-            resultDiv.textContent = 'Stocks with higher delivery: ' + data.symbols.join(', ');
+            resultDiv.textContent = 'Stocks List : ' + data.symbols.join(', ');
           } else {
             resultDiv.textContent = 'No matching stocks found.';
           }
